@@ -1,0 +1,195 @@
+{
+	"info": {
+		"_postman_id": "e4a8f9c1-6h0i-1234-5678-abcdef987654",
+		"name": "deadPR Project (Ready-to-Run)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Public",
+			"item": [
+				{
+					"name": "Get All Trainers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/public/trainers",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "public", "trainers"]
+						},
+						"description": "Fetches a list of all trainer profiles. No authentication needed."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Trainer By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/public/trainers/{{trainerId}}",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "public", "trainers", "{{trainerId}}"]
+						},
+						"description": "Fetches the profile of a single trainer. Replace `{{trainerId}}` with a real ID from your database. No authentication needed."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register New User (Client)",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Another Test Client\",\n    \"email\": \"client2@example.com\",\n    \"password\": \"client@123\",\n    \"phoneNumber\": \"2234567890\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "register"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"a.aliurooz786@gmail.com\",\n    \"password\": \"test@1234\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "auth", "login"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "Admin: Create New Trainer",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_jwt}}", "type": "string"}]},
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"New Trainer Jane Doe\",\n    \"email\": \"jane.trainer@example.com\",\n    \"password\": \"jane@123\",\n    \"phoneNumber\": \"8887776665\",\n    \"description\": \"Certified Yoga instructor with 10 years of experience.\",\n    \"specializations\": [\"Yoga\", \"Flexibility\"]\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/trainers",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "trainers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Admin: Create New Package",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{admin_jwt}}", "type": "string"}]},
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"30-Day Yoga Challenge\",\n    \"description\": \"A plan for beginners to master the basics of Yoga.\",\n    \"price\": 1500,\n    \"durationInDays\": 30,\n    \"trainerId\": \"{{trainerId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/admin/packages",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "admin", "packages"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Client: Book a Package",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{client_jwt}}", "type": "string"}]},
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"packageId\": \"{{packageId}}\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/client/bookings",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "client", "bookings"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trainer",
+			"item": [
+				{
+					"name": "Trainer: Get My Clients",
+					"request": {
+						"auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{trainer_jwt}}", "type": "string"}]},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/trainer/my-clients",
+							"host": ["{{baseUrl}}"],
+							"path": ["api", "trainer", "my-clients"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8090"
+		},
+		{
+			"key": "admin_jwt",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhLmFsaXVyb296Nzg2QGdtYWlsLmNvbSIsImlhdCI6MTc1NzUwMjUxMSwiZXhwIjoxNzU3NTM4NTExfQ.0Db8-YgXp20j9NNAutZpRXG2DFCEpDGDk8tkUYYwECM",
+			"type": "string"
+		},
+		{
+			"key": "trainerId",
+			"value": "PASTE_TRAINER_ID_HERE",
+			"type": "string"
+		},
+		{
+			"key": "packageId",
+			"value": "PASTE_PACKAGE_ID_HERE",
+			"type": "string"
+		},
+		{
+			"key": "client_jwt",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjbGllbnRAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTc1MDI1ODcsImV4cCI6MTc1NzUzODU4N30.8KujuU5qfJYx2N0qOgduNVbjUjUAXRWjEdN53sAc1P0",
+			"type": "string"
+		},
+		{
+			"key": "trainer_jwt",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhbWFuLnRyYWluZXJAZXhhbXBsZS5jb20iLCJpYXQiOjE3NTc1MDI0ODIsImV4cCI6MTc1NzUzODQ4Mn0.X0kVSi0ceapfPYDMKlpf8l5QN52uS8-LoETSLXCAMRo",
+			"type": "string"
+		}
+	]
+}
