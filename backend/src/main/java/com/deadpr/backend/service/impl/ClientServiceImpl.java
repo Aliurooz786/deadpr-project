@@ -1,7 +1,10 @@
 package com.deadpr.backend.service.impl;
 
 import com.deadpr.backend.dto.client.CreateBookingRequestDto;
-import com.deadpr.backend.model.*;
+import com.deadpr.backend.model.Booking;
+import com.deadpr.backend.model.BookingStatus;
+import com.deadpr.backend.model.TrainingPackage;
+import com.deadpr.backend.model.User;
 import com.deadpr.backend.repository.BookingRepository;
 import com.deadpr.backend.repository.TrainingPackageRepository;
 import com.deadpr.backend.repository.UserRepository;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -29,6 +33,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Booking bookPackage(CreateBookingRequestDto request, String clientEmail) {
+        // ... (This method has no changes)
         log.info("Client with email {} is attempting to book package {}", clientEmail, request.getPackageId());
 
         User client = userRepository.findByEmail(clientEmail)
@@ -50,4 +55,15 @@ public class ClientServiceImpl implements ClientService {
 
         return savedBooking;
     }
+
+    @Override
+    public List<Booking> getMyBookings(String clientEmail) {
+        log.info("Fetching bookings for client with email: {}", clientEmail);
+
+        User client = userRepository.findByEmail(clientEmail)
+                .orElseThrow(() -> new RuntimeException("Client not found with email: " + clientEmail));
+
+        return bookingRepository.findByClient(client);
+    }
 }
+

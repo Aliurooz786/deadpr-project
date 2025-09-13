@@ -1,6 +1,7 @@
 package com.deadpr.backend.controller;
 
 import com.deadpr.backend.model.Trainer;
+import com.deadpr.backend.model.TrainingPackage;
 import com.deadpr.backend.service.PublicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,11 @@ public class PublicController {
     public ResponseEntity<Trainer> getTrainerById(@PathVariable String trainerId) {
         Trainer trainer = publicService.getTrainerById(trainerId);
         return ResponseEntity.ok(trainer);
+    }
+
+    @GetMapping("/trainers/{trainerId}/packages")
+    public ResponseEntity<List<TrainingPackage>> getPackagesByTrainerId(@PathVariable String trainerId) {
+        List<TrainingPackage> packages = publicService.getPackagesByTrainerId(trainerId);
+        return ResponseEntity.ok(packages);
     }
 }
