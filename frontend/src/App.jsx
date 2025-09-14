@@ -5,7 +5,9 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import TrainersPage from './pages/TrainersPage';
 import DashboardPage from './pages/DashboardPage';
-import TrainerDetailPage from './pages/TrainerDetailPage'; // Naye page ko import karein
+import TrainerDetailPage from './pages/TrainerDetailPage';
+import AboutPage from './pages/AboutPage'; 
+import ContactPage from './pages/ContactPage'; 
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
         <Route path="trainers" element={<TrainersPage />} />
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="trainer/:trainerId" element={<TrainerDetailPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="contact" element={<ContactPage />} />
 
       </Route>
     </Routes>

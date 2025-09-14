@@ -21,9 +21,10 @@ const Footer = () => {
                 </div>
 
                 <div className="mt-8 border-t border-slate-700 pt-6 flex flex-col sm:flex-row justify-between items-center text-sm">
-                    <p className="text-slate-500">&copy; {new Date().getFullYear()} deadPR. All Rights Reserved.</p>
+                    {/* YAHAN BADLAAV KIYA GAYA HAI */}
+                    <p className="text-slate-500">&copy; {new Date().getFullYear()} deadPR. Built with ❤️ by Urooz Ali.</p>
                     <div className="flex space-x-4 mt-4 sm:mt-0">
-                        <a href="#" className="hover:text-white"><Instagram size={20} /></a>
+                        <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white"><Instagram size={20} /></a>
                     </div>
                 </div>
             </div>
