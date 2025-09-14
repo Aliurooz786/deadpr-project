@@ -3,6 +3,7 @@ package com.deadpr.backend.service.impl;
 import com.deadpr.backend.dto.client.CreateBookingRequestDto;
 import com.deadpr.backend.model.Booking;
 import com.deadpr.backend.model.BookingStatus;
+import com.deadpr.backend.model.Role;
 import com.deadpr.backend.model.TrainingPackage;
 import com.deadpr.backend.model.User;
 import com.deadpr.backend.repository.BookingRepository;
@@ -12,6 +13,7 @@ import com.deadpr.backend.service.ClientService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,14 +35,23 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Booking bookPackage(CreateBookingRequestDto request, String clientEmail) {
-        // ... (This method has no changes)
         log.info("Client with email {} is attempting to book package {}", clientEmail, request.getPackageId());
 
         User client = userRepository.findByEmail(clientEmail)
                 .orElseThrow(() -> new RuntimeException("Client not found with email: " + clientEmail));
 
+        if (client.getRole() != Role.ROLE_CLIENT) {
+            log.warn("SECURITY ALERT: Non-client user {} with role {} tried to book a package.", clientEmail, client.getRole());
+            throw new AccessDeniedException("Only clients can book packages.");
+        }
+
         TrainingPackage trainingPackage = trainingPackageRepository.findById(request.getPackageId())
                 .orElseThrow(() -> new RuntimeException("Package not found with ID: " + request.getPackageId()));
+        boolean alreadyBooked = bookingRepository.existsByClientAndTrainingPackageAndStatus(client, trainingPackage, BookingStatus.ACTIVE);
+        if (alreadyBooked) {
+            log.warn("Client {} tried to book package {} which is already active.", clientEmail, request.getPackageId());
+            throw new IllegalStateException("You already have an active booking for this package.");
+        }
 
         Booking booking = new Booking();
         booking.setClient(client);
