@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { User as UserIcon } from 'lucide-react';
 import Footer from '../components/shared/Footer';
+import { Toaster } from 'sonner'; // Toaster ko import karein
 
 // WhatsApp icon helper component
 const WhatsAppIcon = (props) => (
@@ -76,7 +77,7 @@ const MainLayout = () => {
                                     Blog
                                 </Link>
                                 <a
-                                    href="https://wa.me/919169968069" // Yahan apna WhatsApp number daalein
+                                    href="https://wa.me/919169968069"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="text-slate-600 hover:bg-slate-100 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium flex items-center gap-2"
@@ -142,6 +143,8 @@ const MainLayout = () => {
             </main>
             
             <Footer />
+
+            <Toaster position="top-right" richColors />
         </div>
     );
 };
