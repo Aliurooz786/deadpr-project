@@ -40,6 +40,7 @@ export const registerUser = (userData) => apiClient.post('/auth/register', userD
 // --- CLIENT APIS ---
 export const getMyBookings = () => apiClient.get('/client/my-bookings');
 export const bookPackage = (packageId) => apiClient.post('/client/bookings', { packageId });
+export const updateProfile = (profileData) => apiClient.put('/client/profile', profileData);
 
 
 // --- TRAINER APIS ---

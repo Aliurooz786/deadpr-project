@@ -1,6 +1,7 @@
 package com.deadpr.backend.service.impl;
 
 import com.deadpr.backend.dto.client.CreateBookingRequestDto;
+import com.deadpr.backend.dto.client.UpdateProfileRequestDto;
 import com.deadpr.backend.model.Booking;
 import com.deadpr.backend.model.BookingStatus;
 import com.deadpr.backend.model.Role;
@@ -17,6 +18,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -75,6 +77,21 @@ public class ClientServiceImpl implements ClientService {
                 .orElseThrow(() -> new RuntimeException("Client not found with email: " + clientEmail));
 
         return bookingRepository.findByClient(client);
+    }
+    @Override
+    public User updateProfile(String userEmail, UpdateProfileRequestDto request) {
+        log.info("User {} is attempting to update their profile", userEmail);
+
+        User userToUpdate = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + userEmail));
+
+        userToUpdate.setName(request.getName());
+        userToUpdate.setPhoneNumber(request.getPhoneNumber());
+        userToUpdate.setUpdatedAt(LocalDateTime.now());
+        User updatedUser = userRepository.save(userToUpdate);
+        log.info("User {} profile updated successfully", userEmail);
+
+        return updatedUser;
     }
 }
 

@@ -1,7 +1,9 @@
 package com.deadpr.backend.controller;
 
 import com.deadpr.backend.dto.client.CreateBookingRequestDto;
+import com.deadpr.backend.dto.client.UpdateProfileRequestDto;
 import com.deadpr.backend.model.Booking;
+import com.deadpr.backend.model.User;
 import com.deadpr.backend.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,5 +35,13 @@ public class ClientController {
         String clientEmail = authentication.getName();
         List<Booking> bookings = clientService.getMyBookings(clientEmail);
         return ResponseEntity.ok(bookings);
+    }
+
+    @PutMapping("/profile")
+    @PreAuthorize("hasAnyRole('CLIENT', 'TRAINER', 'ADMIN')")
+    public ResponseEntity<User> updateProfile(@RequestBody UpdateProfileRequestDto request, Authentication authentication) {
+        String userEmail = authentication.getName();
+        User updatedUser = clientService.updateProfile(userEmail, request);
+        return ResponseEntity.ok(updatedUser);
     }
 }

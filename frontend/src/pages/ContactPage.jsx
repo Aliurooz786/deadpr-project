@@ -22,7 +22,7 @@ const ContactPage = () => {
                             <h3 className="text-xl font-semibold mb-2">Email Us</h3>
                             <p className="text-slate-600 mb-4">For general questions, support, or partnerships.</p>
                             <a href="mailto:contact@deadpr.com" className="text-red-600 font-semibold hover:underline">
-                                contact@deadpr.com
+                                Work.deadprfitness@gmail.com
                             </a>
                         </CardContent>
                     </Card>
@@ -36,8 +36,8 @@ const ContactPage = () => {
                         <CardContent>
                             <h3 className="text-xl font-semibold mb-2">WhatsApp Us</h3>
                             <p className="text-slate-600 mb-4">For a faster response, connect with us on WhatsApp.</p>
-                            <a href="https://wa.me/919169968069" target="_blank" rel="noopener noreferrer" className="text-red-600 font-semibold hover:underline">
-                                +91 91699 68069
+                            <a href="https://wa.me/7376604335" target="_blank" rel="noopener noreferrer" className="text-red-600 font-semibold hover:underline">
+                                +91 7376604335 
                             </a>
                         </CardContent>
                     </Card>
@@ -50,9 +50,9 @@ const ContactPage = () => {
                         </CardHeader>
                         <CardContent>
                             <h3 className="text-xl font-semibold mb-2">Our Office</h3>
-                            <p className="text-slate-600 mb-4">Visit us at our headquarters for a coffee.</p>
+                            <p className="text-slate-600 mb-4">Visit us at our Office for a coffee.</p>
                             <p className="text-red-600 font-semibold">
-                                Lucknow, Uttar Pradesh, India
+                                Dolphin Enclave Lucknow, Uttar Pradesh, India
                             </p>
                         </CardContent>
                     </Card>
