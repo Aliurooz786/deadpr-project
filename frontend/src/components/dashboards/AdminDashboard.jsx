@@ -28,11 +28,11 @@ const AdminDashboard = () => {
     const [isCreatingTrainer, setIsCreatingTrainer] = useState(false);
     const [isTrainerDialogOpen, setIsTrainerDialogOpen] = useState(false);
     const [trainerForm, setTrainerForm] = useState({ name: '', email: '', password: '', phoneNumber: '', description: '', specializations: '' });
+    const [profileImage, setProfileImage] = useState(null); // Naya state image ke liye
 
     // Create Package State
     const [isCreatingPackage, setIsCreatingPackage] = useState(false);
     const [isPackageDialogOpen, setIsPackageDialogOpen] = useState(false);
-    // Yahan badlaav kiya gaya hai
     const [packageForm, setPackageForm] = useState({ description: '', price: '', trainerId: '' });
 
 
@@ -63,7 +63,6 @@ const AdminDashboard = () => {
     };
 
     const handleTrainerFormChange = (e) => setTrainerForm(prev => ({ ...prev, [e.target.id]: e.target.value }));
-    // Naye handlers
     const handlePackageFormChange = (e) => setPackageForm(prev => ({ ...prev, [e.target.id]: e.target.value }));
     const handleTrainerSelect = (trainerId) => setPackageForm(prev => ({ ...prev, trainerId }));
     
@@ -73,10 +72,14 @@ const AdminDashboard = () => {
         try {
             const specializationsArray = trainerForm.specializations.split(',').map(s => s.trim()).filter(s => s);
             const trainerData = { ...trainerForm, specializations: specializationsArray };
-            await createTrainer(trainerData);
+            
+            // Yahan badlaav kiya gaya hai: Hum ab profileImage bhi bhej rahe hain
+            await createTrainer(trainerData, profileImage);
+            
             alert('Trainer created successfully!');
             setIsTrainerDialogOpen(false);
             setTrainerForm({ name: '', email: '', password: '', phoneNumber: '', description: '', specializations: '' });
+            setProfileImage(null); // Image state ko reset karein
             fetchDashboardData();
         } catch (error) {
             alert(error.response?.data?.message || 'Failed to create trainer.');
@@ -93,7 +96,6 @@ const AdminDashboard = () => {
         }
         setIsCreatingPackage(true);
         try {
-    
             const packageData = {
                 ...packageForm,
                 name: "1 Month Powerlifting Basics",
@@ -102,7 +104,7 @@ const AdminDashboard = () => {
             await createPackage(packageData);
             alert('Package created successfully!');
             setIsPackageDialogOpen(false);
-            setPackageForm({ description: '', price: '', trainerId: '' }); 
+            setPackageForm({ description: '', price: '', trainerId: '' });
         } catch (error) {
             alert(error.response?.data?.message || 'Failed to create package.');
         } finally {
@@ -143,6 +145,11 @@ const AdminDashboard = () => {
                                     <Input id="phoneNumber" placeholder="Phone Number" value={trainerForm.phoneNumber} onChange={handleTrainerFormChange} required />
                                     <Textarea id="description" placeholder="Description" value={trainerForm.description} onChange={handleTrainerFormChange} required />
                                     <Input id="specializations" placeholder="Specializations (e.g., Yoga, Powerlifting)" value={trainerForm.specializations} onChange={handleTrainerFormChange} />
+                                    {/* Naya image input field */}
+                                    <div className="grid w-full max-w-sm items-center gap-1.5">
+                                        <Label htmlFor="profileImage">Profile Image</Label>
+                                        <Input id="profileImage" type="file" onChange={(e) => setProfileImage(e.target.files[0])} accept="image/*" />
+                                    </div>
                                 </div>
                                 <DialogFooter>
                                     <Button type="submit" disabled={isCreatingTrainer}>
@@ -152,7 +159,7 @@ const AdminDashboard = () => {
                             </form>
                         </DialogContent>
                     </Dialog>
-                    {/* Create Package Dialog (Partially hardcoded) */}
+                    {/* Create Package Dialog */}
                     <Dialog open={isPackageDialogOpen} onOpenChange={setIsPackageDialogOpen}>
                         <DialogTrigger asChild><Button variant="outline">Create Package</Button></DialogTrigger>
                         <DialogContent className="sm:max-w-[425px]">

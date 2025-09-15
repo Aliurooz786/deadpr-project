@@ -19,7 +19,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import com.deadpr.backend.service.FileUploadService;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -35,13 +38,20 @@ public class AdminServiceImpl implements AdminService {
     @Autowired private TrainingPackageRepository trainingPackageRepository;
     @Autowired private BookingRepository bookingRepository;
     @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired private FileUploadService fileUploadService;
+
 
     @Override
-    public User createTrainer(CreateTrainerRequestDto request) {
+    public User createTrainer(CreateTrainerRequestDto request, MultipartFile profileImage) throws IOException {
         log.info("Admin is attempting to create a new trainer with email: {}", request.getEmail());
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            log.warn("Trainer creation failed: Email already in use - {}", request.getEmail());
             throw new IllegalStateException("Email already in use.");
+        }
+
+        String imageUrl = null;
+        if (profileImage != null && !profileImage.isEmpty()) {
+            imageUrl = fileUploadService.uploadFile(profileImage);
+            log.info("Profile image uploaded to Cloudinary: {}", imageUrl);
         }
         User userAccount = new User();
         userAccount.setName(request.getName());
@@ -51,11 +61,14 @@ public class AdminServiceImpl implements AdminService {
         userAccount.setRole(Role.ROLE_TRAINER);
         userAccount.setCreatedAt(LocalDateTime.now());
         User savedUser = userRepository.save(userAccount);
+
         Trainer trainerProfile = new Trainer();
         trainerProfile.setDescription(request.getDescription());
         trainerProfile.setSpecializations(request.getSpecializations());
         trainerProfile.setUser(savedUser);
+        trainerProfile.setProfileImageUrl(imageUrl); // Image URL save karein
         trainerRepository.save(trainerProfile);
+
         log.info("Trainer account and profile created successfully for user ID: {}", savedUser.getId());
         return savedUser;
     }
